@@ -1,12 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "preprocessor.h"
-int find_macro(char *word, Macro *macros, int count)
-{
-    int i;
-    int j;
-    for (i = 0; i < count; i++)
-    {
+int find_macro(char *word, Macro *macros, int count){
+    int i,j;
+    for (i = 0; i < count; i++){
         j = 0;
         while (word[j] != '\0' && word[j] == macros[i].name[j])
             j++;
@@ -15,14 +12,11 @@ int find_macro(char *word, Macro *macros, int count)
     }
     return -1;
 }
-int store_macro(char *line, Macro **macros, int *count)
-{
+int store_macro(char *line, Macro **macros, int *count){
     char name[50];
     char value[200];
     Macro *temp;
-    int i = 7;
-    int j = 0;
-    int k = 0;
+    int i = 7,j = 0,k = 0;
     while (line[i] == ' ')
         i++;
     while (line[i] != ' ' && line[i] != '\n' && line[i] != '\0')
@@ -49,36 +43,24 @@ int store_macro(char *line, Macro **macros, int *count)
     (*count)++;
     return 0;
 }
-int substitute_macro(char *line, Macro *macros, int count, char **output, int *size)
-{
-    int i = 0;
-    int j;
-    int k;
-    int found;
-    int len;
-    int depth;
-    char word[100];
-    char *replacement;
-    char *temp;
-    while (line[i] != '\0')
-    {
-        if (line[i] == '"' || line[i] == '\'')
-        {
+int substitute_macro(char *line, Macro *macros, int count, char **output, int *size){
+    int i=0,j,k,found,len,depth;
+    char *replacement,*temp,word[100];
+    while (line[i] != '\0'){
+        if (line[i] == '"' || line[i] == '\''){
             char quote = line[i++];
             temp = realloc(*output, *size + 2);
             if (temp == NULL)
                 return -1;
             *output = temp;
             (*output)[(*size)++] = quote;
-            while (line[i] != '\0')
-            {
+            while (line[i] != '\0'){
                 temp = realloc(*output, *size + 2);
                 if (temp == NULL)
                     return -1;
                 *output = temp;
                 (*output)[(*size)++] = line[i];
-                if (line[i] == '\\' && line[i + 1] != '\0')
-                {
+                if (line[i] == '\\' && line[i + 1] != '\0'){
                     i++;
                     temp = realloc(*output, *size + 2);
                     if (temp == NULL)
@@ -86,8 +68,7 @@ int substitute_macro(char *line, Macro *macros, int count, char **output, int *s
                     *output = temp;
                     (*output)[(*size)++] = line[i];
                 }
-                else if (line[i] == quote)
-                {
+                else if (line[i] == quote){
                     i++;
                     break;
                 }
@@ -97,8 +78,7 @@ int substitute_macro(char *line, Macro *macros, int count, char **output, int *s
         }
         else if ((line[i] >= 'A' && line[i] <= 'Z') ||
                  (line[i] >= 'a' && line[i] <= 'z') ||
-                 line[i] == '_')
-        {
+                 line[i] == '_'){
             j = 0;
             while ((line[i] >= 'A' && line[i] <= 'Z') ||
                    (line[i] >= 'a' && line[i] <= 'z') ||
@@ -108,8 +88,7 @@ int substitute_macro(char *line, Macro *macros, int count, char **output, int *s
             word[j] = '\0';
             replacement = word;
             depth = 0;
-            while (depth < 20)
-            {
+            while (depth < 20){
                 found = find_macro(replacement, macros, count);
                 if (found == -1)
                     break;
@@ -128,8 +107,7 @@ int substitute_macro(char *line, Macro *macros, int count, char **output, int *s
             *size += len;
             (*output)[*size] = '\0';
         }
-        else
-        {
+        else{
             temp = realloc(*output, *size + 2);
             if (temp == NULL)
                 return -1;

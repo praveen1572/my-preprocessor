@@ -1,7 +1,6 @@
 #ifndef PREPROCESSOR_H
 #define PREPROCESSOR_H
-typedef struct
-{
+typedef struct{
     char *name;
     char *replacement;
 } Macro;

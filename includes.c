@@ -2,24 +2,13 @@
 #include <stdlib.h>
 #include "preprocessor.h"
 
-int header_inclusion(char *line, char **output, int *size, Macro **macros, int *count)
-{
+int header_inclusion(char *line, char **output, int *size, Macro **macros, int *count){
     FILE *fp;
-    char filename[100];
-    char *start;
-    char *end;
-    char *header;
-    char *clean;
-    char *temp;
-    char buffer[1000];
+    char *start,*end,*header,*clean,*temp,filename[100],buffer[1000];
     long header_size;
-    int name_size;
-    int i;
-    int len;
-    int mode = 0;
+    int name_size,i,len,mode = 0;
 
     start = line;
-
     while (*start != '"' && *start != '<' && *start != '\0')
         start++;
 
@@ -54,22 +43,19 @@ int header_inclusion(char *line, char **output, int *size, Macro **macros, int *
     header_size = ftell(fp);
     rewind(fp);
 
-    if (header_size < 0)
-    {
+    if (header_size < 0){
         fclose(fp);
         return -1;
     }
 
     header = malloc(header_size + 1);
 
-    if (header == NULL)
-    {
+    if (header == NULL){
         fclose(fp);
         return -1;
     }
 
-    if (fread(header, 1, header_size, fp) != (size_t)header_size)
-    {
+    if (fread(header, 1, header_size, fp) != (size_t)header_size){
         free(header);
         fclose(fp);
         return -1;
@@ -80,15 +66,12 @@ int header_inclusion(char *line, char **output, int *size, Macro **macros, int *
 
     i = 0;
 
-    while (i < header_size)
-    {
+    while (i < header_size){
         len = 0;
-
         while (header[i + len] != '\n' && header[i + len] != '\0')
             len++;
 
-        if (len >= 999)
-        {
+        if (len >= 999){
             free(header);
             return -1;
         }
@@ -98,18 +81,15 @@ int header_inclusion(char *line, char **output, int *size, Macro **macros, int *
 
         buffer[len] = '\0';
 
-        if (remove_comments(buffer, &clean, &mode) != 0)
-        {
+        if (remove_comments(buffer, &clean, &mode) != 0){
             free(header);
             return -1;
         }
 
         if (clean[0] == '#' && clean[1] == 'd' && clean[2] == 'e' &&
             clean[3] == 'f' && clean[4] == 'i' && clean[5] == 'n' &&
-            clean[6] == 'e')
-        {
-            if (store_macro(clean, macros, count) != 0)
-            {
+            clean[6] == 'e'){
+            if (store_macro(clean, macros, count) != 0){
                 free(clean);
                 free(header);
                 return -1;
@@ -117,28 +97,22 @@ int header_inclusion(char *line, char **output, int *size, Macro **macros, int *
         }
         else if (clean[0] == '#' && clean[1] == 'i' && clean[2] == 'n' &&
                  clean[3] == 'c' && clean[4] == 'l' && clean[5] == 'u' &&
-                 clean[6] == 'd' && clean[7] == 'e')
-        {
-            if (header_inclusion(clean, output, size, macros, count) != 0)
-            {
+                 clean[6] == 'd' && clean[7] == 'e'){
+            if (header_inclusion(clean, output, size, macros, count) != 0){
                 free(clean);
                 free(header);
                 return -1;
             }
         }
-        else
-        {
-            if (substitute_macro(clean, *macros, *count, output, size) != 0)
-            {
+        else{
+            if (substitute_macro(clean, *macros, *count, output, size) != 0){
                 free(clean);
                 free(header);
                 return -1;
             }
 
             temp = realloc(*output, *size + 2);
-
-            if (temp == NULL)
-            {
+            if (temp == NULL){
                 free(clean);
                 free(header);
                 return -1;
@@ -156,8 +130,6 @@ int header_inclusion(char *line, char **output, int *size, Macro **macros, int *
         if (header[i] == '\n')
             i++;
     }
-
     free(header);
-
     return 0;
 }
