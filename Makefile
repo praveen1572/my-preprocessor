@@ -1,4 +1,4 @@
-CC = cc
+CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -pedantic
 TARGET = my_Preprocessor
 OBJS = main.o comments.o includes.o macros.o
