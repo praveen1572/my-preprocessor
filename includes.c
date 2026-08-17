@@ -1,38 +1,51 @@
-#include"myheader.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "preprocessor.h"
 
-int header_inclusion(char *line, FILE *out)
+int header_inclusion(char *line,FILE *out)
 {
     FILE *fp;
-    char filename[100], temp[1000], *clean;
-    int i = 0, j = 0, mode = 0;
+    char filename[100],path[300],temp[1000];
+    int i=0,j=0;
 
-    while(line[i] != '"' && line[i] != '<' && line[i] != '\0')
+    while(line[i]!='"'&&line[i]!='<'&&line[i]!='\0')
         i++;
 
-    i++;
+    if(line[i]=='<'){
+        i++;
 
-    while(line[i] != '"' && line[i] != '>' && line[i] != '\0')
-        filename[j++] = line[i++];
+        while(line[i]!='>'&&line[i]!='\0')
+            filename[j++]=line[i++];
 
-    filename[j] = '\0';
+        filename[j]='\0';
 
-    fp = fopen(filename, "r");
+        if(strcmp(filename,"stdio.h")==0||
+           strcmp(filename,"stdlib.h")==0||
+           strcmp(filename,"string.h")==0){
 
-    while(fgets(temp, 1000, fp) != NULL)
-    {
-        remove_comments(temp, &clean, &mode);
+            strcpy(path,
+                   "C:/mingw64/mingw64/x86_64-w64-mingw32/include/");
+            strcat(path,filename);
 
-        if(strncmp(clean, "#define", 7) == 0)
-            store_macro(clean);
-
-        else if(strncmp(clean, "#include", 8) == 0)
-            header_inclusion(clean, out);
-
+            fp=fopen(path,"r");
+        }
         else
-            substitute_macro(clean, out);
-
-        free(clean);
+            return 0;
     }
+    else{
+        i++;
+
+        while(line[i]!='"'&&line[i]!='\0')
+            filename[j++]=line[i++];
+
+        filename[j]='\0';
+
+        fp=fopen(filename,"r");
+    }
+
+    while(fgets(temp,1000,fp)!=NULL)
+        fputs(temp,out);
 
     fclose(fp);
 
