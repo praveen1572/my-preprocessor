@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -pedantic
-TARGET = my_Preprocessor
+TARGET = my_Preprocessor.exe
 OBJS = main.o comments.o includes.o macros.o
 
 $(TARGET): $(OBJS)
@@ -19,4 +19,4 @@ macros.o: macros.c preprocessor.h
 	$(CC) $(CFLAGS) -c macros.c
 
 clean:
-	rm -f $(OBJS) $(TARGET) *.i
+	del /Q $(OBJS) $(TARGET) *.i
