@@ -8,7 +8,6 @@ int main(){
     int k = abc;
     /* remove
 
-
     multi line comment */
     pf("%d %d\n", k, coding);
     pf("#include");
