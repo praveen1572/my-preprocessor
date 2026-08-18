@@ -9,7 +9,6 @@ int main(){
     /* remove
 
 
-
     multi line comment */
     pf("%d %d\n", k, coding);
     pf("#include");
