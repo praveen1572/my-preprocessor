@@ -15,39 +15,26 @@ int header_inclusion(char *line,FILE *out)
     if(line[i]=='<'){
         i++;
 
-        while(line[i]!='>'&&line[i]!='\0')
+        while(line[i]!='>')
             filename[j++]=line[i++];
 
         filename[j]='\0';
-
-        if(strcmp(filename,"stdio.h")==0||
-           strcmp(filename,"stdlib.h")==0||
-           strcmp(filename,"string.h")==0){
-
-            strcpy(path,
-                   "C:/mingw64/mingw64/x86_64-w64-mingw32/include/");
-            strcat(path,filename);
-
-            fp=fopen(path,"r");
-        }
-        else
-            return 0;
+        strcpy(path,"C:/mingw64/mingw64/x86_64-w64-mingw32/include/");
+        strcat(path,filename);
+        fp=fopen(path,"r");
     }
+
     else{
         i++;
 
-        while(line[i]!='"'&&line[i]!='\0')
+        while(line[i]!='"')
             filename[j++]=line[i++];
 
         filename[j]='\0';
-
         fp=fopen(filename,"r");
     }
-
     while(fgets(temp,1000,fp)!=NULL)
         fputs(temp,out);
-
     fclose(fp);
-
     return 0;
 }

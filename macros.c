@@ -7,22 +7,19 @@ int store_macro(char *line){
     int i=8,j=0,k=0;
 
     macro[count]=malloc(50);
-    body[count]=malloc(200);
+    body[count]=malloc(50);
 
     while(line[i]!=' ')
         macro[count][j++]=line[i++];
-
     macro[count][j]='\0';
-
+    
     i++;
 
     while(line[i]!='\n'&&line[i]!='\0')
         body[count][k++]=line[i++];
-
     body[count][k]='\0';
 
     count++;
-
     return 0;
 }
 
@@ -31,16 +28,11 @@ int substitute_macro(char *line,FILE *out){
     char temp[100];
 
     while(line[i]!='\0'){
-        if((line[i]>='A'&&line[i]<='Z')||
-           (line[i]>='a'&&line[i]<='z')||
-           line[i]=='_'){
+        if((line[i]>='A'&&line[i]<='Z')||(line[i]>='a'&&line[i]<='z')||line[i]=='_'){
 
             j=0;
 
-            while((line[i]>='A'&&line[i]<='Z')||
-                  (line[i]>='a'&&line[i]<='z')||
-                  (line[i]>='0'&&line[i]<='9')||
-                  line[i]=='_')
+            while((line[i]>='A'&&line[i]<='Z')||(line[i]>='a'&&line[i]<='z')||(line[i]>='0'&&line[i]<='9')||line[i]=='_')
                 temp[j++]=line[i++];
 
             temp[j]='\0';

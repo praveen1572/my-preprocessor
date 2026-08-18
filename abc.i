@@ -1345,8 +1345,5 @@ int main(){
     
 
 
-
-
     printf("%d %d\n", k, 65);
-    printf("#include");
 }
