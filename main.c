@@ -3,14 +3,13 @@
 #include <string.h>
 #include "preprocessor.h"
 
-char *macro[100];
-char *body[100];
-int count=0;
+char *macro[100],*body[100];
+int count=0,mode=0;
 
 int main(int argc,char *argv[]){
     FILE *fp,*out;
     char *line,*clean,filename[100];
-    int mode=0,i;
+    int i;
 
     fp=fopen(argv[1],"r");
 
@@ -22,7 +21,7 @@ int main(int argc,char *argv[]){
     line=malloc(1000);
 
     while(fgets(line,1000,fp)!=0){
-        remove_comments(line,&clean,&mode);
+        remove_comments(line,&clean);
 
         if(strncmp(clean,"#define",7)==0)
             store_macro(clean);
