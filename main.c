@@ -21,7 +21,7 @@ int main(int argc,char *argv[]){
     out=fopen(filename,"w");
     line=malloc(1000);
 
-    while(fgets(line,1000,fp)!=NULL){
+    while(fgets(line,1000,fp)!=0){
         remove_comments(line,&clean,&mode);
 
         if(strncmp(clean,"#define",7)==0)

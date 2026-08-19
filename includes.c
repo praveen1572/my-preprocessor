@@ -17,13 +17,11 @@ int header_inclusion(char *line,FILE *out)
 
         while(line[i]!='>')
             filename[j++]=line[i++];
-
         filename[j]='\0';
         strcpy(path,"C:/mingw64/mingw64/x86_64-w64-mingw32/include/");
         strcat(path,filename);
         fp=fopen(path,"r");
     }
-
     else{
         i++;
 
@@ -33,8 +31,15 @@ int header_inclusion(char *line,FILE *out)
         filename[j]='\0';
         fp=fopen(filename,"r");
     }
-    while(fgets(temp,1000,fp)!=NULL)
-        fputs(temp,out);
+    char *clean;
+    int mode = 0;
+
+    while(fgets(temp,1000,fp) != 0)
+    {
+        remove_comments(temp, &clean, &mode);
+        fputs(clean, out);
+        free(clean);
+    }
     fclose(fp);
     return 0;
 }

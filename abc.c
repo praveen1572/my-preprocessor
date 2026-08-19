@@ -1,5 +1,5 @@
+#include<string.h>
 #include "myheader.h"
-#include<stdio.h>
 #define abc 3456
 #define pf printf
 #define coding 65
