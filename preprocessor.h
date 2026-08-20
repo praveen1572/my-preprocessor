@@ -2,12 +2,10 @@
 #define PREPROCESSOR_H
 
 #include <stdio.h>
-
 extern char *macro[100];
 extern char *body[100];
 extern int count;
 extern int mode;
-
 int remove_comments(char *line,char **clean);
 int store_macro(char *line);
 int substitute_macro(char *line,FILE *out);
