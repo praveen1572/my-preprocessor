@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "preprocessor.h"
-
 int store_macro(char *line){
     int i=8,j=0,k=0;
     macro[count]=malloc(50);
