@@ -2,19 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include "preprocessor.h"
-
-int header_inclusion(char *line,FILE *out)
-{
+int header_inclusion(char *line,FILE *out){
     FILE *fp;
     char filename[100],path[300],temp[1000];
     int i=0,j=0;
 
     while(line[i]!='"'&&line[i]!='<'&&line[i]!='\0')
         i++;
-
     if(line[i]=='<'){
         i++;
-
         while(line[i]!='>')
             filename[j++]=line[i++];
         filename[j]='\0';
@@ -24,17 +20,14 @@ int header_inclusion(char *line,FILE *out)
     }
     else{
         i++;
-
         while(line[i]!='"')
             filename[j++]=line[i++];
-
         filename[j]='\0';
         fp=fopen(filename,"r");
     }
     char *clean;
 
-    while(fgets(temp,1000,fp)!=0)
-    {
+    while(fgets(temp,1000,fp)!=0){
         remove_comments(temp,&clean);
         fputs(clean,out);
         free(clean);
